@@ -2,7 +2,9 @@
 
 A clinic platform with three portals — **patient**, **doctor**, **admin** — built around one idea: the consultation should start prepared. Patients describe symptoms before the visit, an LLM triages them for the doctor, and the doctor's notes come back to the patient in plain language with a medication schedule that emails itself.
 
-**Stack:** Node.js + Express + MongoDB (Mongoose) · React + Vite · Nodemailer/SendGrid · Google Calendar API (OAuth 2.0) · pluggable LLM (Anthropic / OpenAI / Gemini)
+**🔴 Live Website:** [https://healthcare-appointment.com](https://healthcare-appointment-amsy.onrender.com)
+
+**Tech Stack:** Node.js + Express + MongoDB (Mongoose) · React + Vite · Nodemailer · Google Calendar API (OAuth 2.0) · pluggable LLM (Gemini)
 
 ---
 
@@ -76,7 +78,7 @@ Create `server/.env` from `server/.env.example`. Below is what each variable is 
 |---|---|---|
 | `NODE_ENV` | `development` | `production` when deployed |
 | `PORT` | `5000` | Hosts like Render set this themselves — leave it |
-| `CLIENT_URL` | `http://localhost:5173` | Your deployed frontend URL in production. Used for CORS and email links |
+| `CLIENT_URL` | `https://healthcare-appointment-amsy.onrender.com` | Your deployed frontend URL in production. Used for CORS and email links |
 | `SERVER_URL` | `http://localhost:5000` | Your deployed API URL in production |
 
 ### Database
