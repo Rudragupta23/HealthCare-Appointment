@@ -1,9 +1,3 @@
-/* ------------------------------------------------------------------
-   City Clinic - design tokens
-   Palette is drawn from clinical signage: pine ink on cool paper,
-   a single teal action colour, and a three-step triage scale that is
-   used ONLY for urgency so colour always means the same thing.
-------------------------------------------------------------------- */
 :root {
   --ink: #12211f;
   --ink-soft: #4a5c58;

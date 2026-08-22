@@ -77,7 +77,7 @@ export default function BookAppointment() {
     }
   }
 
-  /* ------------------------- step 3: symptoms ------------------------- */
+  /* step 3: symptoms */
   if (hold) {
     return (
       <>
@@ -128,7 +128,7 @@ export default function BookAppointment() {
     );
   }
 
-  /* --------------------- steps 1 and 2: doctor + slot --------------------- */
+  /* steps 1 and 2: doctor + slot */
   return (
     <>
       <div className="page-head">

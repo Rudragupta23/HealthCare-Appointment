@@ -32,7 +32,7 @@ export default function Layout({ children }) {
         <div className="topbar-inner">
           <Link className="brand" to="/">
             <span className="brand-mark" aria-hidden="true" />
-            City Clinic
+          HealthCare Appointment
           </Link>
           <nav className="nav">
             {links.map((l) => (

@@ -27,7 +27,7 @@ export default function Register() {
   return (
     <div className="auth">
       <aside className="auth-aside">
-        <div className="eyebrow" style={{ color: '#8fa6a2' }}>City Clinic</div>
+        <div className="eyebrow" style={{ color: '#8fa6a2' }}>HealthCare Appointment</div>
         <h1>Register once. Book in a minute.</h1>
         <ul>
           <li>Search by specialisation and pick a real, open slot.</li>

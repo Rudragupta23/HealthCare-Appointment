@@ -17,7 +17,7 @@ export default function Login() {
       await login(form.email, form.password);
       navigate('/');
     } catch (err) {
-      setError(err.message);
+      setError('Invalid email or password. Please check your credentials.');
     } finally {
       setBusy(false);
     }
@@ -26,7 +26,7 @@ export default function Login() {
   return (
     <div className="auth">
       <aside className="auth-aside">
-        <div className="eyebrow" style={{ color: '#8fa6a2' }}>City Clinic</div>
+        <div className="eyebrow" style={{ color: '#8fa6a2' }}>HealthCare Appointmen</div>
         <h1>Appointments that arrive prepared.</h1>
         <ul>
           <li>Patients describe symptoms once, before the visit.</li>
@@ -51,12 +51,6 @@ export default function Login() {
           <button className="btn" style={{ width: '100%' }} disabled={busy}>{busy ? 'Signing in' : 'Sign in'}</button>
           <p className="small muted" style={{ marginTop: 16 }}>
             New patient? <Link to="/register">Create an account</Link>
-          </p>
-          <div className="divider" />
-          <p className="small muted mono" style={{ lineHeight: 1.8 }}>
-            demo · admin@clinic.test / Admin@12345<br />
-            demo · anita.rao@clinic.test / Doctor@12345<br />
-            demo · patient@clinic.test / Patient@12345
           </p>
         </form>
       </div>
