@@ -16,7 +16,7 @@ export async function api(path, { method = 'GET', body, auth = true } = {}) {
   try {
     res = await fetch(`${BASE}${path}`, { method, headers, body: body ? JSON.stringify(body) : undefined });
   } catch {
-    throw new Error('Cannot reach the server. Check that the API is running.');
+    throw new Error('Server error.');
   }
 
   const text = await res.text();

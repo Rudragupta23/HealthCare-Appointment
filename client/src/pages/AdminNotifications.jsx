@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api.js';
-import { Alert, Loading, fmtDateTime } from '../components/ui.jsx';
+import { Alert, Field, Loading, fmtDateTime } from '../components/ui.jsx';
 
 export default function AdminNotifications() {
   const [jobs, setJobs] = useState(null);
@@ -26,48 +26,74 @@ export default function AdminNotifications() {
     <>
       <div className="page-head">
         <div>
-          <div className="eyebrow">Admin</div>
-          <h1>Notifications</h1>
-          <p>Every email is queued before it is sent, so a failed delivery can be inspected and retried instead of vanishing.</p>
-        </div>
-        <div>
-          <label>Status</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="">All</option>
-            <option value="pending">Pending</option>
-            <option value="sent">Sent</option>
-            <option value="failed">Failed</option>
-          </select>
+          <div className="eyebrow">Admin Portal</div>
+          <h1>System Notifications</h1>
+          <p>Every email is queued before it is sent, allowing you to inspect and retry failed deliveries.</p>
         </div>
       </div>
 
       <Alert kind="ok">{message}</Alert>
       <Alert kind="error">{error}</Alert>
 
-      {!jobs ? <Loading /> : (
-        <div className="card scroll-x">
-          <table className="data">
-            <thead>
-              <tr><th>Created</th><th>To</th><th>Type</th><th>Subject</th><th>Status</th><th>Tries</th><th>Last error</th><th /></tr>
-            </thead>
-            <tbody>
-              {jobs.map((j) => (
-                <tr key={j._id}>
-                  <td className="mono small">{fmtDateTime(j.createdAt)}</td>
-                  <td className="small">{j.to}</td>
-                  <td className="small muted">{j.type}</td>
-                  <td className="small">{j.subject}</td>
-                  <td style={{ color: j.status === 'failed' ? 'var(--triage-high)' : undefined }}>{j.status}</td>
-                  <td className="mono">{j.attempts}</td>
-                  <td className="small muted" style={{ maxWidth: 240 }}>{j.lastError || '-'}</td>
-                  <td>{j.status !== 'sent' && <button className="btn btn-ghost btn-sm" onClick={() => retry(j._id)}>Retry</button>}</td>
-                </tr>
-              ))}
-              {jobs.length === 0 && <tr><td colSpan="8" className="muted">No emails yet.</td></tr>}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <div className="dashboard-grid">
+        <section>
+          {!jobs ? <Loading /> : (
+            <div className="card scroll-x" style={{ padding: 0, overflow: 'hidden' }}>
+              <table className="data" style={{ margin: 0 }}>
+                <thead style={{ background: 'var(--paper)' }}>
+                  <tr>
+                    <th style={{ paddingLeft: '24px' }}>Created</th>
+                    <th>To</th>
+                    <th>Type</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Tries</th>
+                    <th>Last Error</th>
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  {jobs.map((j) => (
+                    <tr key={j._id}>
+                      <td className="mono small" style={{ paddingLeft: '24px' }}>{fmtDateTime(j.createdAt)}</td>
+                      <td className="small" style={{ fontWeight: 500 }}>{j.to}</td>
+                      <td className="small muted" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>{j.type}</td>
+                      <td className="small">{j.subject}</td>
+                      <td>
+                        <span className={`tag ${j.status === 'failed' ? 'tag-warn' : j.status === 'pending' ? 'tag-grey' : ''}`} style={{ color: j.status === 'failed' ? 'var(--triage-high)' : undefined }}>
+                          {j.status}
+                        </span>
+                      </td>
+                      <td className="mono">{j.attempts}</td>
+                      <td className="small muted" style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={j.lastError}>
+                        {j.lastError || '-'}
+                      </td>
+                      <td style={{ paddingRight: '24px', textAlign: 'right' }}>
+                        {j.status !== 'sent' && <button className="btn btn-ghost btn-sm" onClick={() => retry(j._id)}>Retry</button>}
+                      </td>
+                    </tr>
+                  ))}
+                  {jobs.length === 0 && <tr><td colSpan="8" className="muted" style={{ padding: '24px', textAlign: 'center' }}>No emails yet.</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        <aside>
+          <div className="card">
+            <h2 className="section-title" style={{ fontSize: '1.1rem', marginBottom: '16px' }}>Filters</h2>
+            <Field label="Status">
+              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                <option value="">All</option>
+                <option value="pending">Pending</option>
+                <option value="sent">Sent</option>
+                <option value="failed">Failed</option>
+              </select>
+            </Field>
+          </div>
+        </aside>
+      </div>
     </>
   );
 }

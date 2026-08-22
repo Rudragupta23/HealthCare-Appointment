@@ -81,47 +81,57 @@ export default function BookAppointment() {
   if (hold) {
     return (
       <>
-        <div className="page-head">
+        <div className="page-head" style={{ alignItems: 'flex-start' }}>
           <div>
-            <div className="eyebrow">Step 3 of 3 · symptom form</div>
-            <h1>Tell the doctor what is going on</h1>
-            <p>This is summarised and triaged for {selectedDoctor.user.name} before your visit. The slot stays yours until the timer runs out.</p>
+            <div className="eyebrow">Step 3 of 3 · Pre-visit Form</div>
+            <h1>Describe your symptoms</h1>
+            <p>This is securely summarized and triaged for {selectedDoctor.user.name} before your visit.</p>
           </div>
-          <HoldTimer expiresAt={hold.holdExpiresAt} onExpire={() => { setHold(null); setError('Your hold expired and the slot was released. Please choose a slot again.'); }} />
+          <div className="card card-tight" style={{ background: 'var(--teal-wash)', borderColor: 'var(--teal)', display: 'inline-block' }}>
+            <HoldTimer expiresAt={hold.holdExpiresAt} onExpire={() => { setHold(null); setError('Your hold expired and the slot was released. Please choose a slot again.'); }} />
+          </div>
         </div>
 
         <Alert kind="error">{error}</Alert>
 
-        <form className="card" onSubmit={confirm} style={{ maxWidth: 720 }}>
-          <Field label="What is the problem?" hint="Plain language is fine. Ten characters minimum.">
+        <form className="card" onSubmit={confirm} style={{ maxWidth: 800, margin: '0 auto' }}>
+          <h2 className="section-title">Medical Context</h2>
+          <Field label="What is the primary reason for your visit?" hint="Plain language is fine. Ten characters minimum.">
             <textarea required minLength={10} value={symptoms.description} onChange={(e) => setSymptoms({ ...symptoms, description: e.target.value })}
-              placeholder="Dry cough for five days, worse at night, mild fever since Tuesday." />
+              placeholder="Dry cough for five days, worse at night, mild fever since Tuesday." style={{ minHeight: '120px' }} />
           </Field>
           <div className="field-row">
             <Field label="How long has this been going on?">
-              <input value={symptoms.durationOfSymptoms} onChange={(e) => setSymptoms({ ...symptoms, durationOfSymptoms: e.target.value })} placeholder="5 days" />
+              <input value={symptoms.durationOfSymptoms} onChange={(e) => setSymptoms({ ...symptoms, durationOfSymptoms: e.target.value })} placeholder="e.g., 5 days" />
             </Field>
             <Field label={`Pain level: ${symptoms.painLevel}/10`}>
-              <input type="range" min="0" max="10" value={symptoms.painLevel} onChange={(e) => setSymptoms({ ...symptoms, painLevel: Number(e.target.value) })} />
+              <input type="range" min="0" max="10" value={symptoms.painLevel} onChange={(e) => setSymptoms({ ...symptoms, painLevel: Number(e.target.value) })} style={{ accentColor: 'var(--teal)' }} />
             </Field>
           </div>
+          
+          <div className="divider" style={{ margin: '24px 0' }} />
+          <h2 className="section-title">History & Allergies</h2>
+          
           <Field label="Existing conditions">
-            <input value={symptoms.existingConditions} onChange={(e) => setSymptoms({ ...symptoms, existingConditions: e.target.value })} placeholder="Asthma, type 2 diabetes" />
+            <input value={symptoms.existingConditions} onChange={(e) => setSymptoms({ ...symptoms, existingConditions: e.target.value })} placeholder="e.g., Asthma, type 2 diabetes" />
           </Field>
           <div className="field-row">
-            <Field label="Medication you take now">
-              <input value={symptoms.currentMedication} onChange={(e) => setSymptoms({ ...symptoms, currentMedication: e.target.value })} placeholder="Metformin 500mg" />
+            <Field label="Medication you currently take">
+              <input value={symptoms.currentMedication} onChange={(e) => setSymptoms({ ...symptoms, currentMedication: e.target.value })} placeholder="e.g., Metformin 500mg" />
             </Field>
             <Field label="Allergies">
-              <input value={symptoms.allergies} onChange={(e) => setSymptoms({ ...symptoms, allergies: e.target.value })} placeholder="Penicillin" />
+              <input value={symptoms.allergies} onChange={(e) => setSymptoms({ ...symptoms, allergies: e.target.value })} placeholder="e.g., Penicillin" />
             </Field>
           </div>
-          <div className="btn-row">
-            <button className="btn" disabled={busy}>{busy ? 'Confirming' : 'Confirm appointment'}</button>
-            <button type="button" className="btn btn-ghost" onClick={() => setHold(null)} disabled={busy}>Back to slots</button>
+          
+          <div className="divider" style={{ margin: '24px 0' }} />
+          
+          <div className="btn-row" style={{ alignItems: 'center', justifyContent: 'space-between' }}>
+            <button type="button" className="btn btn-ghost" onClick={() => setHold(null)} disabled={busy}>Cancel & Release Slot</button>
+            <button className="btn" disabled={busy} style={{ minWidth: '200px' }}>{busy ? 'Confirming...' : 'Confirm Appointment'}</button>
           </div>
-          <p className="hint" style={{ marginTop: 12 }}>
-            Confirming books the slot, emails both of you, and adds the visit to any connected Google Calendar.
+          <p className="hint" style={{ marginTop: 16, textAlign: 'right' }}>
+            Confirming automatically emails both parties and updates your calendar.
           </p>
         </form>
       </>
@@ -133,51 +143,52 @@ export default function BookAppointment() {
     <>
       <div className="page-head">
         <div>
-          <div className="eyebrow">Step {selectedDoctor ? '2' : '1'} of 3 · {selectedDoctor ? 'choose a time' : 'choose a doctor'}</div>
-          <h1>Book an appointment</h1>
+          <div className="eyebrow">Step {selectedDoctor ? '2' : '1'} of 3 · {selectedDoctor ? 'Select a time' : 'Find a specialist'}</div>
+          <h1>Book an Appointment</h1>
         </div>
       </div>
 
       <Alert kind="error">{error}</Alert>
       <Alert kind="ok">{notice}</Alert>
 
-      <div className="split">
+      <div className="dashboard-grid">
         <section>
-          <div className="card" style={{ marginBottom: 16 }}>
-            <div className="field-row">
-              <Field label="Specialisation">
-                <select value={filters.specialisation} onChange={(e) => setFilters({ ...filters, specialisation: e.target.value })}>
+          <div className="card" style={{ marginBottom: '24px', background: 'var(--paper)', border: 'none' }}>
+            <div className="field-row" style={{ alignItems: 'end' }}>
+              <Field label="Filter by Specialisation" style={{ marginBottom: 0 }}>
+                <select value={filters.specialisation} onChange={(e) => setFilters({ ...filters, specialisation: e.target.value })} style={{ border: '1px solid var(--line)' }}>
                   <option value="all">All specialisations</option>
                   {specialisations.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
               </Field>
-              <Field label="Search by name">
-                <input value={filters.q} onChange={(e) => setFilters({ ...filters, q: e.target.value })} placeholder="Dr Rao" />
+              <Field label="Search by Name" style={{ marginBottom: 0 }}>
+                <input value={filters.q} onChange={(e) => setFilters({ ...filters, q: e.target.value })} placeholder="e.g., Dr Rao" style={{ border: '1px solid var(--line)' }} />
               </Field>
             </div>
           </div>
 
+          <h2 className="section-title">Available Doctors</h2>
           {doctors.length === 0 ? (
-            <Empty title="No doctors match">Try a different specialisation.</Empty>
+            <Empty title="No doctors match your criteria">Try adjusting your search or specialisation filter.</Empty>
           ) : (
             <div className="list">
               {doctors.map((d) => {
                 const active = selectedDoctor?._id === d._id;
                 return (
-                  <article key={d._id} className="card card-tight" style={active ? { borderColor: 'var(--teal)', background: 'var(--teal-wash)' } : undefined}>
+                  <article key={d._id} className="card card-tight" style={active ? { borderColor: 'var(--teal)', background: 'var(--teal-wash)', borderLeft: '4px solid var(--teal)' } : { borderLeft: '4px solid transparent' }}>
                     <div className="appt-row">
                       <div>
-                        <h3 style={{ margin: 0 }}>{d.user.name}</h3>
-                        <div className="appt-meta">{d.specialisation}{d.qualification ? ` · ${d.qualification}` : ''}</div>
-                        <div className="small muted" style={{ marginTop: 4 }}>
-                          {d.experienceYears} yrs · {d.slotDurationMinutes} min slots · fee {d.consultationFee}
+                        <h3 style={{ margin: 0, fontSize: '1.1rem', color: active ? 'var(--teal-dark)' : 'var(--ink)' }}>{d.user.name}</h3>
+                        <div className="appt-meta" style={{ marginTop: '4px' }}>{d.specialisation}{d.qualification ? ` · ${d.qualification}` : ''}</div>
+                        <div className="small muted" style={{ marginTop: '4px' }}>
+                          <span style={{ fontWeight: 600 }}>{d.experienceYears} yrs experience</span> · {d.slotDurationMinutes} min slots · fee ${d.consultationFee}
                         </div>
                       </div>
                       <button className={`btn btn-sm ${active ? '' : 'btn-ghost'}`} onClick={() => setSelectedDoctor(d)}>
-                        {active ? 'Selected' : 'See times'}
+                        {active ? 'Selected' : 'View Schedule'}
                       </button>
                     </div>
-                    {d.bio && <p className="small muted" style={{ margin: '8px 0 0' }}>{d.bio}</p>}
+                    {d.bio && <p className="small muted" style={{ margin: '12px 0 0', padding: '8px 12px', background: active ? 'rgba(255,255,255,0.5)' : 'var(--paper)', borderRadius: '8px' }}>"{d.bio}"</p>}
                   </article>
                 );
               })}
@@ -185,46 +196,53 @@ export default function BookAppointment() {
           )}
         </section>
 
-        <aside className="card" style={{ position: 'sticky', top: 78 }}>
-          {!selectedDoctor ? (
-            <Empty title="Pick a doctor">Their open slots appear here.</Empty>
-          ) : (
-            <>
-              <div className="eyebrow">{selectedDoctor.user.name}</div>
-              <h3>{fmtDate(`${date}T12:00:00`)}</h3>
+        <aside>
+          <div className="card" style={{ position: 'sticky', top: 90 }}>
+            {!selectedDoctor ? (
+              <Empty title="Select a specialist">Their available calendar slots will appear here.</Empty>
+            ) : (
+              <>
+                <h2 className="section-title" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>{selectedDoctor.user.name}'s Calendar</h2>
+                <h3 style={{ color: 'var(--teal)', fontSize: '1.1rem', marginBottom: '20px' }}>{fmtDate(`${date}T12:00:00`)}</h3>
 
-              <Field label="Date">
-                <input type="date" min={todayKey()} value={date} onChange={(e) => setDate(e.target.value)} />
-              </Field>
+                <Field label="Select Date">
+                  <input type="date" min={todayKey()} value={date} onChange={(e) => setDate(e.target.value)} />
+                </Field>
 
-              <p className="small muted mono">
-                works: {[...new Set(selectedDoctor.workingHours.map((w) => DAYS[w.dayOfWeek].slice(0, 3)))].join(' ') || 'not set'}
-              </p>
+                <div style={{ padding: '12px', background: 'var(--paper)', borderRadius: '8px', marginBottom: '20px' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Standard Hours: </span>
+                  <span className="small mono" style={{ color: 'var(--ink)' }}>
+                    {[...new Set(selectedDoctor.workingHours.map((w) => DAYS[w.dayOfWeek].slice(0, 3)))].join(' ') || 'Not set'}
+                  </span>
+                </div>
 
-              {!availability ? <Loading label="Checking availability" /> : availability.onLeave ? (
-                <Alert kind="info">On leave this day: {availability.reason}</Alert>
-              ) : availability.slots.length === 0 ? (
-                <Alert kind="info">{availability.reason || 'No slots on this date.'}</Alert>
-              ) : (
-                <>
-                  <div className="slots">
-                    {availability.slots.map((s) => (
-                      <button key={s.startTime} className="slot" disabled={!s.available}
-                        aria-pressed={slot === s.startTime}
-                        title={s.available ? 'Available' : s.reason === 'booked' ? 'Already booked' : 'Time has passed'}
-                        onClick={() => setSlot(s.startTime)}>
-                        {s.label}
-                      </button>
-                    ))}
-                  </div>
-                  <button className="btn" style={{ width: '100%', marginTop: 14 }} disabled={!slot || busy} onClick={reserve}>
-                    {busy ? 'Holding slot' : slot ? 'Hold this slot' : 'Select a time'}
-                  </button>
-                  <p className="hint">Holding reserves the slot while you fill the symptom form. Nobody else can take it in the meantime.</p>
-                </>
-              )}
-            </>
-          )}
+                <div className="divider" style={{ margin: '20px 0' }} />
+
+                {!availability ? <Loading label="Checking availability" /> : availability.onLeave ? (
+                  <Alert kind="info">Doctor is on leave this day: {availability.reason}</Alert>
+                ) : availability.slots.length === 0 ? (
+                  <Alert kind="info">{availability.reason || 'No available slots on this date.'}</Alert>
+                ) : (
+                  <>
+                    <div className="slots" style={{ marginBottom: '24px' }}>
+                      {availability.slots.map((s) => (
+                        <button key={s.startTime} className="slot" disabled={!s.available}
+                          aria-pressed={slot === s.startTime}
+                          title={s.available ? 'Available' : s.reason === 'booked' ? 'Already booked' : 'Time has passed'}
+                          onClick={() => setSlot(s.startTime)}>
+                          {s.label}
+                        </button>
+                      ))}
+                    </div>
+                    <button className="btn btn-full" disabled={!slot || busy} onClick={reserve}>
+                      {busy ? 'Holding slot...' : slot ? 'Hold Selected Slot' : 'Select a time above'}
+                    </button>
+                    <p className="hint" style={{ textAlign: 'center', marginTop: '12px' }}>Holding temporarily reserves the slot so nobody else can take it while you fill out your symptoms.</p>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </aside>
       </div>
     </>

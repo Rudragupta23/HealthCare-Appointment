@@ -32,19 +32,32 @@ export default function Layout({ children }) {
         <div className="topbar-inner">
           <Link className="brand" to="/">
             <span className="brand-mark" aria-hidden="true" />
-          HealthCare Appointment
+            HealthCare Portal
           </Link>
-          <nav className="nav">
-            {links.map((l) => (
-              <NavLink key={l.to} to={l.to} end={l.end} className={({ isActive }) => (isActive ? 'active' : '')}>
-                {l.label}
-              </NavLink>
-            ))}
-            <span className="nav-user">{user?.name} · {user?.role}</span>
-            <button className="btn btn-ghost btn-sm" style={{ color: '#dfeae7', borderColor: 'rgba(255,255,255,.2)' }} onClick={() => { logout(); navigate('/login'); }}>
-              Sign out
-            </button>
-          </nav>
+          
+          <div className="nav-container">
+            <nav className="nav">
+              {links.map((l) => (
+                <NavLink key={l.to} to={l.to} end={l.end} className={({ isActive }) => (isActive ? 'active' : '')}>
+                  {l.label}
+                </NavLink>
+              ))}
+            </nav>
+
+            <div className="user-badge">
+              <div className="nav-user">
+                {user?.name}
+                <span>{user?.role}</span>
+              </div>
+              <button 
+                className="btn btn-ghost btn-sm" 
+                style={{ color: '#fff', borderColor: 'rgba(255,255,255,.2)' }} 
+                onClick={() => { logout(); navigate('/login'); }}
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
         </div>
       </header>
       <main className="page">{children}</main>

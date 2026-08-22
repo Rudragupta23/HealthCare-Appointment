@@ -19,48 +19,74 @@ export default function Reminders() {
       <div className="page-head">
         <div>
           <div className="eyebrow">Patient portal</div>
-          <h1>Medication schedule</h1>
-          <p>Built from your prescriptions. Each dose sends you an email at the scheduled time.</p>
+          <h1>Medication Schedule</h1>
+          <p>Built directly from your prescriptions. We will email you a reminder right when it is time for each dose.</p>
         </div>
       </div>
 
-      <h2>Coming up</h2>
-      {upcoming.length === 0 ? (
-        <Empty title="No doses scheduled">Reminders appear here after a doctor completes a visit and prescribes medication.</Empty>
-      ) : (
-        <div className="card scroll-x">
-          <table className="data">
-            <thead><tr><th>When</th><th>Medicine</th><th>Dosage</th><th>Instructions</th></tr></thead>
-            <tbody>
-              {upcoming.map((r) => (
-                <tr key={r._id}>
-                  <td className="mono small">{fmtDateTime(r.scheduledAt)}</td>
-                  <td>{r.medicine}</td>
-                  <td className="small">{r.dosage || '-'}</td>
-                  <td className="small muted">{r.instructions || '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <div className="dashboard-grid">
+        <section>
+          <h2 className="section-title">Coming Up Next</h2>
+          {upcoming.length === 0 ? (
+            <Empty title="No doses scheduled">
+              Reminders will appear here after a doctor completes your visit and prescribes medication.
+            </Empty>
+          ) : (
+            <div className="card scroll-x" style={{ padding: 0, overflow: 'hidden' }}>
+              <table className="data" style={{ margin: 0 }}>
+                <thead style={{ background: 'var(--paper)' }}>
+                  <tr>
+                    <th style={{ paddingLeft: '24px' }}>When</th>
+                    <th>Medicine</th>
+                    <th>Dosage</th>
+                    <th>Instructions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {upcoming.map((r) => (
+                    <tr key={r._id}>
+                      <td className="mono small" style={{ paddingLeft: '24px', fontWeight: 600 }}>{fmtDateTime(r.scheduledAt)}</td>
+                      <td style={{ fontWeight: 500 }}>{r.medicine}</td>
+                      <td className="small">{r.dosage || '-'}</td>
+                      <td className="small muted">{r.instructions || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
 
-      {done.length > 0 && (
-        <>
-          <div className="divider" />
-          <h2>Already sent</h2>
-          <div className="card scroll-x">
-            <table className="data">
-              <thead><tr><th>When</th><th>Medicine</th><th>Status</th></tr></thead>
-              <tbody>
-                {done.slice(0, 50).map((r) => (
-                  <tr key={r._id}><td className="mono small">{fmtDateTime(r.scheduledAt)}</td><td>{r.medicine}</td><td className="small muted">{r.status}</td></tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
+        <aside>
+          <h2 className="section-title">History</h2>
+          {done.length === 0 ? (
+            <div className="card card-tight">
+              <p className="muted small" style={{ margin: 0 }}>No past reminders yet.</p>
+            </div>
+          ) : (
+            <div className="card card-tight scroll-x" style={{ padding: 0 }}>
+              <table className="data" style={{ margin: 0 }}>
+                <thead style={{ background: 'var(--paper)' }}>
+                  <tr>
+                    <th style={{ paddingLeft: '20px' }}>When</th>
+                    <th>Medicine</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {done.slice(0, 50).map((r) => (
+                    <tr key={r._id}>
+                      <td className="mono small" style={{ paddingLeft: '20px' }}>{fmtDateTime(r.scheduledAt)}</td>
+                      <td style={{ fontWeight: 500 }}>{r.medicine}</td>
+                      <td><span className="tag tag-grey">{r.status}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </aside>
+      </div>
     </>
   );
 }
