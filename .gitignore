@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+# env & secrets
+.env
+.env.local
+*.pem
+# build artifacts
+dist/
+build/
+out/
+.next/
+# editor / os
+.vscode/
+.idea/
+.DS_Store
+# logs
+*.log
+npm-debug.log*
