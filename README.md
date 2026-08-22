@@ -1,4 +1,4 @@
-# Healthcare Appointment & Follow-up Manager
+# Healthcare Appointment
 
 A clinic platform with three portals — **patient**, **doctor**, **admin** — built around one idea: the consultation should start prepared. Patients describe symptoms before the visit, an LLM triages them for the doctor, and the doctor's notes come back to the patient in plain language with a medication schedule that emails itself.
 
