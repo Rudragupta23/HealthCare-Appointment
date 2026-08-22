@@ -26,7 +26,7 @@ export default function Login() {
   return (
     <div className="auth">
       <aside className="auth-aside">
-        <div className="eyebrow" style={{ color: '#8fa6a2' }}>HealthCare Appointmen</div>
+        <div className="eyebrow" style={{ color: '#8fa6a2' }}>HealthCare Appointment</div>
         <h1>Appointments that arrive prepared.</h1>
         <ul>
           <li>Patients describe symptoms once, before the visit.</li>
