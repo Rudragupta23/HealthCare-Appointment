@@ -385,13 +385,11 @@ Ten patients race for one slot simultaneously. Expected output: one success, nin
 3. Add every variable from `.env` in the Environment tab, with `NODE_ENV=production`, `CLIENT_URL` = your deployed frontend, `SERVER_URL` = the Render URL
 4. Add the Render callback URL to the Google Console redirect URIs
 
-**Frontend on Vercel**
+**Frontend on Render**
 
 1. Import the repo → root directory `client` → framework Vite
 2. Environment variable `VITE_API_URL=https://your-api.onrender.com/api`
-3. Deploy, then set that Vercel URL as `CLIENT_URL` on the backend
-
-Render's free tier sleeps after inactivity — the first request wakes it, and the email worker resumes with it (queued jobs survive because they are in the database).
+3. Deploy, then set that URL as `CLIENT_URL` on the backend
 
 ---
 

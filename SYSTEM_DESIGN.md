@@ -1,6 +1,6 @@
 # System design write-up
 
-*Healthcare Appointment & Follow-up Manager — 790 words*
+*Healthcare Appointment
 
 ## Preventing double-booking
 
@@ -37,5 +37,3 @@ Email delivery is slow and unreliable, so nothing sends inline. Every message is
 The worker runs each minute, picks up jobs where `nextAttemptAt <= now`, and on failure backs off exponentially (1, 2, 4, 8, 16 minutes) up to `EMAIL_MAX_ATTEMPTS` before marking the job `failed` with its last error. Failures are visible and repairable: the admin Notifications page lists every job with attempt counts and error text, and offers a manual retry. Medication reminders are separate rows scheduled from the prescription's frequency and duration; when they fall due the worker converts them into email jobs, so retry logic is written once.
 
 Google Calendar is treated as best-effort. Failures are caught, recorded on the appointment as `calendar.status` (`created` / `partial` / `failed`), and never roll back a booking — a patient who never connected Google still gets a valid appointment. The LLM is handled the same way: calls are time-boxed with `AbortController`, retried twice on transient errors, and on permanent failure fall back to a deterministic rule-based summariser. Every summary records whether it came from the model or the fallback, so a doctor is never misled about the provenance of what they are reading, and the admin dashboard counts fallbacks as a health signal.
-
-The theme throughout: integrations degrade, the core booking record does not.
